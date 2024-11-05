@@ -8,38 +8,6 @@ const port = 5000;
 app.use(cors());
 app.use(express.json());
 
-// app.post('/chat', async (req, res) => {
-//     const { message, systemPrompt } = req.body;
-    
-//     try {
-//         const response = await axios.post(
-//             'http://localhost:11434/api/chat',
-//             { 
-//                 "model": "llama3.2",
-//                 "messages": [
-//                     { "role": "system", "content": systemPrompt },
-//                     { "role": "user", "content": message }
-//                 ]
-//             }
-//         );
-
-//         const responseLines = response.data.trim().split('\n');
-//         let combinedMessage = '';
-
-//         responseLines.forEach(line => {
-//             const parsedLine = JSON.parse(line);
-//             combinedMessage += parsedLine.message.content;
-//         });
-
-//         console.log(combinedMessage);
-//         res.json({ reply: combinedMessage});
-//     } catch (error) {
-//         console.error('Error:', error);
-//         console.log("error in backend");
-//         res.status(500).json({ error: 'An error occurred while processing your request' });
-//     }
-// });
-
 const conversations = {};
 
 app.post('/chat', async (req, res) => {
@@ -102,7 +70,9 @@ app.get('/healthz', async (req, res) => {
             combinedMessage += parsedLine.message.content;
         });
 
-        res.json(combinedMessage);
+        if(response){
+            res.status(200).json({ message: combinedMessage });
+        }
         console.log(combinedMessage);
 
     } catch (error) {
@@ -114,28 +84,4 @@ app.get('/healthz', async (req, res) => {
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
-
-        // const response = await ollama.chat({
-        //     model: 'llama3.2',
-        //     messages: [{ role: 'user', content: 'Why is the sky blue?' }],
-        // });
-        // console.log(response.message.content);
-
-
-        // const response = await axios.post(
-        //     'http://localhost:11434/api/chat',
-        //     {
-        //         "model": "llama3.2",
-        //         "messages": [
-        //           { "role": "user", "content": "why is the sky blue?" }
-        //         ]
-        //     }
-        // )
-        // res.json({ response: response.data });
-        // console.log(response.data);
-        //works
-
-        // const ollamaClient = new Ollama({
-//     baseUrl: 'http://localhost:11434', 
-//   });
 
